@@ -1,12 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import Colors from '../assets/constants/Colors';
+
 const PlaceDetailScreen = (props) => {
   return (
     <View>
-      <Text>List</Text>
+      <Text>PlaceDetailScreen</Text>
     </View>
   );
+};
+
+PlaceDetailScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: navData.navigation.getParam('placeTitle'),
+  };
 };
 
 const styles = StyleSheet.create({});

@@ -7,17 +7,31 @@ import {
   TextInput,
   StyleSheet,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import Colors from '../assets/constants/Colors';
+import * as placesActions from '../store/places-actions';
+import ImagePicker from '../components/ImagePicker';
 
 const NewPlaceScreen = (props) => {
   const [titleValue, setTitleValue] = useState('');
+  const [selectedImage, setSelectedImage] = useState();
 
-  const titleChangehandler = (text) => {
+  const dispatch = useDispatch();
+
+  const titleChangeHandler = (text) => {
+    // you could add validation
     setTitleValue(text);
   };
 
-  const savePlaceHandler = () => {};
+  const imageTakenHandler = (imagePath) => {
+    setSelectedImage(imagePath);
+  };
+
+  const savePlaceHandler = () => {
+    dispatch(placesActions.addPlace(titleValue, selectedImage));
+    props.navigation.goBack();
+  };
 
   return (
     <ScrollView>
@@ -25,9 +39,10 @@ const NewPlaceScreen = (props) => {
         <Text style={styles.label}>Title</Text>
         <TextInput
           style={styles.textInput}
-          onChangeText={titleChangehandler}
-          value={title}
+          onChangeText={titleChangeHandler}
+          value={titleValue}
         />
+        <ImagePicker onImageTaken={imageTakenHandler} />
         <Button
           title="Save Place"
           color={Colors.primary}
@@ -38,7 +53,9 @@ const NewPlaceScreen = (props) => {
   );
 };
 
-NewPlaceScreen.navigationOptions = {};
+NewPlaceScreen.navigationOptions = {
+  headerTitle: 'Add Place',
+};
 
 const styles = StyleSheet.create({
   form: {
